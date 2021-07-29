@@ -9,11 +9,27 @@ program leaf_photosyn
     real, parameter :: rdse = 490.0, vcmaxse = 490.0,jmaxse  = 490.0 
     real, parameter :: phi_psii = 0.85, theta_j = 0.90, colim_c3 = 0.98
     real, parameter :: rho= 0.10, tau= 0.10
+    real :: vcmaxc, jmaxc, rdc 
 
     vcmax25=60.0
     jmax25 = 1.67 * vcmax25
     rd25 = 0.015 * vcmax25
+ 
+    vcmaxc = fth25(vcmaxhd, vcmaxse)
+    jmaxc  = fth25(jmaxhd, jmaxse)
+    rdc    = fth25(rdhd, rdse)
 
-    print *, jmaxha
+    print *, vcmaxc, jmaxc, rdc
+contains
+real function fth25(hd,se)
+
+    implicit none
+    real, parameter :: tfrz=273.15, rgas = 8.31446
+    real :: hd, se 
+
+    fth25 = 1 + exp((-hd + se*(tfrz+25)) / (rgas*(tfrz+25)))
+end function fth25
 
 end program leaf_photosyn
+
+
