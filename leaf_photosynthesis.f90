@@ -2,6 +2,7 @@
 program leaf_photosyn
     implicit none
     real :: vcmax25, jmax25, rd25
+    real, parameter :: tfrz=273.15, rgas = 8.31446
     real, parameter :: kc25= 404.9, ko25=278.4, cp25=42.75 
     real, parameter :: kcha = 79430.0, koha = 36380.0, rdha = 46390.0, cpha = 37830.0
     real, parameter :: vcmaxha = 65330.0, jmaxha  = 43540.0
@@ -10,6 +11,9 @@ program leaf_photosyn
     real, parameter :: phi_psii = 0.85, theta_j = 0.90, colim_c3 = 0.98
     real, parameter :: rho= 0.10, tau= 0.10
     real :: vcmaxc, jmaxc, rdc 
+    real :: tleaf, kc, ko, cp 
+    real :: t1,t2,vcmax,jmax,rd 
+    !real :: test 
 
     vcmax25=60.0
     jmax25 = 1.67 * vcmax25
@@ -19,8 +23,25 @@ program leaf_photosyn
     jmaxc  = fth25(jmaxhd, jmaxse)
     rdc    = fth25(rdhd, rdse)
 
-    print *, vcmaxc, jmaxc, rdc
-    
+    read *, tleaf 
+    kc = kc25 * ft(tleaf, kcha)
+    ko = ko25 * ft(tleaf, koha)
+    cp = cp25 * ft(tleaf, cpha)
+
+    t1 = ft(tleaf, vcmaxha)
+    t2 = fth(tleaf, vcmaxhd, vcmaxse, vcmaxc)
+    vcmax = vcmax25 * t1 * t2
+
+    t1 = ft(tleaf, jmaxha)
+    t2 = fth(tleaf, jmaxhd, jmaxse, jmaxc)
+    jmax = jmax25 * t1 * t2
+
+    t1 = ft(tleaf, rdha)
+    t2 = fth(tleaf, rdhd, rdse, rdc)
+    rd = rd25 * t1 * t2
+
+    print *, vcmax, jmax, rd     
+
 contains
 real function fth25(hd,se)
 
@@ -38,7 +59,7 @@ real function ft(tl,ha)
     real, parameter :: tfrz=273.15, rgas = 8.31446
     real :: tl, ha 
 
-    ft = exp(ha/(rgas*(tfrz+25)) * (1-(tfrz+25)/tl));
+    ft = exp(ha/(rgas*(tfrz+25)) * (1-(tfrz+25)/tl))
 
 end function ft 
 
