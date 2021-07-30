@@ -11,11 +11,11 @@ program leaf_photosyn
     real, parameter :: phi_psii = 0.85, theta_j = 0.90, colim_c3 = 0.98
     real, parameter :: rho= 0.10, tau= 0.10
     real :: vcmaxc, jmaxc, rdc 
-    real :: tleaf, kc, ko, cp 
+    real :: tleaf=298.15, kc, ko, cp 
     real :: t1,t2,vcmax,jmax,rd 
-    real :: apar
+    real :: apar=1500.0
     real :: qabs,aquad,bquad,cquad,je 
-    real :: co2air, ci, o2air, ac, aj, ag, an     
+    real :: co2air=380.0, ci, o2air=209.0, ac, aj, ag, an     
     !real :: test 
 
     vcmax25=60.0
@@ -26,8 +26,8 @@ program leaf_photosyn
     jmaxc  = fth25(jmaxhd, jmaxse)
     rdc    = fth25(rdhd, rdse)
 
-    print *, "input leaf temperature: "
-    read *, tleaf 
+    !print *, "input leaf temperature: "
+    !read *, tleaf 
 
     kc = kc25 * ft(tleaf, kcha)
     ko = ko25 * ft(tleaf, koha)
@@ -50,8 +50,8 @@ program leaf_photosyn
     ! Solve the polynomial: aquad*je^2 + bquad*je + cquad = 0
     
     
-    print *, 'input leaf absorbed PAR :'
-    read *, apar  
+   ! print *, 'input leaf absorbed PAR :'
+    !read *, apar  
     qabs = 0.5 * phi_psii * apar
     aquad = theta_j
     bquad = -(qabs + jmax)
@@ -61,8 +61,8 @@ program leaf_photosyn
     
 
     ! specify Ci 
-    print *, 'input CO2AIR and o2air: '
-    read *, co2air, o2air  
+    !print *, 'input CO2AIR and o2air: '
+    !read *, co2air, o2air  
     ci = 0.7 * co2air
 
     ! --- C3: Rubisco-limited photosynthesis
@@ -85,6 +85,7 @@ program leaf_photosyn
 
     an = ag - rd 
 
+    print *, 'net photosynthesis at leaf level: ', an
 contains
 real function fth25(hd,se)
 
