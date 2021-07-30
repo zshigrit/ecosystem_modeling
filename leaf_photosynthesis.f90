@@ -13,6 +13,9 @@ program leaf_photosyn
     real :: vcmaxc, jmaxc, rdc 
     real :: tleaf, kc, ko, cp 
     real :: t1,t2,vcmax,jmax,rd 
+    real :: apar
+    real :: qabs,aquad,bquad,cquad,je 
+    real :: co2air, ci, o2air, ac, aj, ag, an     
     !real :: test 
 
     vcmax25=60.0
@@ -23,7 +26,9 @@ program leaf_photosyn
     jmaxc  = fth25(jmaxhd, jmaxse)
     rdc    = fth25(rdhd, rdse)
 
+    print *, "input leaf temperature: "
     read *, tleaf 
+
     kc = kc25 * ft(tleaf, kcha)
     ko = ko25 * ft(tleaf, koha)
     cp = cp25 * ft(tleaf, cpha)
@@ -40,7 +45,45 @@ program leaf_photosyn
     t2 = fth(tleaf, rdhd, rdse, rdc)
     rd = rd25 * t1 * t2
 
-    print *, vcmax, jmax, rd     
+    ! --- Electron transport rate for C3 plants
+
+    ! Solve the polynomial: aquad*je^2 + bquad*je + cquad = 0
+    
+    
+    print *, 'input leaf absorbed PAR :'
+    read *, apar  
+    qabs = 0.5 * phi_psii * apar
+    aquad = theta_j
+    bquad = -(qabs + jmax)
+    cquad = qabs * jmax
+    ! for Je. Correct solution is the smallest of the two roots.
+    je = (-bquad - sqrt(bquad**2-4*aquad*cquad))/(2*aquad)  
+    
+
+    ! specify Ci 
+    print *, 'input CO2AIR and o2air: '
+    read *, co2air, o2air  
+    ci = 0.7 * co2air
+
+    ! --- C3: Rubisco-limited photosynthesis
+
+    ac = vcmax * max(ci - cp, 0.0) / (ci + kc * (1 + o2air / ko))
+    
+    ! --- C3: RuBP regeneration-limited photosynthesis
+
+    aj = je * max(ci - cp, 0.0) / (4 * ci + 8 * cp)
+
+    ! using either colimitaion or the minimum of ac and aj to derive photosynthesis
+
+    aquad = colim_c3;
+    bquad = -(ac + aj)
+    cquad = ac * aj
+ 
+    ag = (-bquad - sqrt(bquad**2-4*aquad*cquad))/(2*aquad)
+
+    ! ag = min(ac,aj)
+
+    an = ag - rd 
 
 contains
 real function fth25(hd,se)
