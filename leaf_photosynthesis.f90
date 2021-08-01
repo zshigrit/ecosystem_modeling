@@ -16,13 +16,13 @@ program leaf_photosyn
     real :: apar=1500.0
     real :: qabs,aquad,bquad,cquad,je 
     real :: co2air=380.0, ci, o2air=209.0, ac, aj, ag, an   
-    integer :: delta_tleaf  
+    integer :: delta_co2  
     !real :: test 
 open(10,file='net_photosyn.csv')
-write(10,'(a5,","a2)') 'tleaf','an'
+write(10,'(a3,","a2)') 'co2','an'
 !write(10,'(a5,",",a2)') [character(6)::'tleaf','an']
-do delta_tleaf = 0, 300
-    tleaf = tfrz + 5.0 + delta_tleaf/10.0
+do delta_co2 = 0, 200
+    co2air = 380.0 + delta_co2
     vcmax25=60.0
     jmax25 = 1.67 * vcmax25
     rd25 = 0.015 * vcmax25
@@ -91,7 +91,7 @@ do delta_tleaf = 0, 300
     an = ag - rd 
 
     print *, 'net photosynthesis at leaf level: ', an
-    write(10,'(f7.2,",",f7.2)') tleaf,an 
+    write(10,'(f5.1,",",f7.2)') co2air,an 
     !write(10,'(F7.2,X,F5.2)') tleaf, an 
 end do 
 
