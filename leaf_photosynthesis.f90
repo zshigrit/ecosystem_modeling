@@ -18,7 +18,7 @@ program leaf_photosyn
     real :: co2air=380.0, ci, o2air=209.0, ac, aj, ag, an   
     integer :: delta_co2  
     !real :: test 
-open(10,file='net_photosyn.csv')
+open(10,file='net_photosyn.dat')
 write(10,'(a3,","a2)') 'co2','an'
 !write(10,'(a5,",",a2)') [character(6)::'tleaf','an']
 do delta_co2 = 0, 200
@@ -92,6 +92,7 @@ do delta_co2 = 0, 200
 
     print *, 'net photosynthesis at leaf level: ', an
     write(10,'(f5.1,",",f7.2)') co2air,an 
+    !write(10,'(f5.1,f7.2)') co2air,an 
     !write(10,'(F7.2,X,F5.2)') tleaf, an 
 end do 
 
