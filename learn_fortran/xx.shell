@@ -1,4 +1,0 @@
-ls
-gfortran trigs.f90 -o test
-./test
-
