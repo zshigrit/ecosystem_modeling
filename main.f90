@@ -1,6 +1,6 @@
 ! leaf photosynthesis coupled with energy balance
 program leaf_photosyn
-    use module_LeafPhotosynthesis
+    use LeafPhotosynthesis
     implicit none
     
     real :: vcmax25, jmax25, rd25
