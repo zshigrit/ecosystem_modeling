@@ -66,7 +66,6 @@ do delta_co2 = 0, 200
     ! for Je. Correct solution is the smallest of the two roots.
     je = (-bquad - sqrt(bquad**2-4*aquad*cquad))/(2*aquad)  
     
-
     ! specify Ci 
     !print *, 'input CO2AIR and o2air: '
     !read *, co2air, o2air  
